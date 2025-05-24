@@ -1,0 +1,17 @@
+{
+    "name": "ApiBenchmark",
+    "version": "1.0.0",
+    "description": "An tool for benchmarking apis.",
+    "author": "Realtin",
+    "license": "MIT",
+    "main": "./src/index.ts",
+    "scripts": {
+        "start": "bun ./src/index.ts"
+    },
+    "devDependencies": {
+        "@types/bun": "latest"
+    },
+    "peerDependencies": {
+        "typescript": "^5"
+    }
+}

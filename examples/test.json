@@ -1,0 +1,11 @@
+{
+    "name": "My Test",
+    "host": "https://bing.com",
+    "path": "",
+    "request": {
+        "method": "GET",
+        "headers": {
+            "Content-Type": "application/json"
+        }
+    }
+}
