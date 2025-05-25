@@ -31,20 +31,26 @@ import * as fs from "fs";
             const response = await fetch(url, {
                 method: request.method,
                 headers: request.headers,
-                body: request.body,
+                body: JSON.stringify(request.body),
             });
 
             // Read the entire response.
-            await response.text();
+            const responseText = await response.text();
+
+            if (args.verbose) {
+                console.log("\x1b[32m[Response]\x1b[0m " + responseText);
+            }
 
             return response.statusText;
         });
 
         elapsedTimes.push(result.elapsed);
+
+        const color = result.value == "OK" ? "\x1b[32m" : "\x1b[31m";
         console.log(
-            `[${result.value}] Request ${i + 1}/${count}: Elapsed time: ${
-                result.elapsed
-            }ms`
+            `[${color}Status: ${result.value}\x1b[0m] ${
+                i + 1
+            }/${count}: Elapsed time: ${result.elapsed}ms`
         );
 
         // Wait for 1 second before sending the next request.
@@ -72,7 +78,7 @@ function parseTest(path: string): ApiTest {
  * Expects two arguments after the script name: a path to a JSON file and a request count.
  * @returns An object with the file path and count; or null if the arguments are invalid.
  */
-function parseArgs(): { path: string; count: number } | null {
+function parseArgs(): { path: string; count: number; verbose: boolean } | null {
     const REQUIRED_ARGS = 2; // Expected arguments after the executable and script.
     // process.argv[0] = node executable, process.argv[1] = script file
     const userArgs = process.argv.slice(2);
@@ -91,5 +97,10 @@ function parseArgs(): { path: string; count: number } | null {
         return null;
     }
 
-    return { path, count };
+    let verbose = false;
+    if (userArgs.length > 2) {
+        verbose = userArgs[2] == "true" ? true : false;
+    }
+
+    return { path, count, verbose };
 }
