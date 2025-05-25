@@ -36,11 +36,15 @@ import * as fs from "fs";
 
             // Read the entire response.
             await response.text();
+
+            return response.statusText;
         });
 
         elapsedTimes.push(result.elapsed);
         console.log(
-            `Request ${i + 1}/${count}: Elapsed time: ${result.elapsed}ms`
+            `[${result.value}] Request ${i + 1}/${count}: Elapsed time: ${
+                result.elapsed
+            }ms`
         );
 
         // Wait for 1 second before sending the next request.
