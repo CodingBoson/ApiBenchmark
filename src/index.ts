@@ -4,7 +4,17 @@ import { sleep } from "./utils/tasks";
 import * as fs from "fs";
 
 (async () => {
+    console.log("###################################################");
+    console.log("#                                                 #");
+    console.log("#            API Test Runner                      #");
+    console.log("#                                                 #");
+    console.log("#  Usage: bun start <path/to/test.json> <count>   #");
+    console.log("#  Example: bun start ./examples/test.json 10     #");
+    console.log("#                                                 #");
+    console.log("###################################################\n");
+
     const args = parseArgs();
+
     if (!args) return;
 
     const test: ApiTest = parseTest(args.path);
@@ -40,17 +50,21 @@ import * as fs from "fs";
     }
 
     const totalElapsed = elapsedTimes.reduce((sum, time) => sum + time, 0);
+
     const averageElapsed = totalElapsed / elapsedTimes.length;
+
     console.log(`\r\nAverage elapsed time: ${averageElapsed.toFixed(2)}ms`);
 })().catch(console.error);
 
 function parseTest(path: string): ApiTest {
     const rawTest = fs.readFileSync(path, "utf-8");
+
     return JSON.parse(rawTest);
 }
 
 function parseArgs(): { path: string; count: number; verbose: boolean } | null {
     const userArgs = process.argv.slice(2);
+
     if (userArgs.length < 2) {
         console.error(
             "ERROR: Missing arguments.\n\nUsage:\n  bun start <path/to/test.json> <count:Number>\n\nExample:\n  bun start ./examples/test.json 10"
@@ -64,6 +78,7 @@ function parseArgs(): { path: string; count: number; verbose: boolean } | null {
         console.error("ERROR: Count must be a positive number.");
         return null;
     }
+
     const verbose = userArgs.length > 2 ? parseBoolean(userArgs[2]) : false;
 
     return { path, count, verbose };
@@ -71,15 +86,18 @@ function parseArgs(): { path: string; count: number; verbose: boolean } | null {
 
 function parseBoolean(arg: string): boolean {
     const normalized = arg.trim().toLowerCase();
+
     if (normalized === "true" || normalized === "1") {
         return true;
     }
     if (normalized === "false" || normalized === "0") {
         return false;
     }
+
     // Return false for any unrecognized value or alternatively throw an error.
     console.error(
         `WARNING: Unable to parse boolean value from "${arg}". Defaulting to false.`
     );
+
     return false;
 }
